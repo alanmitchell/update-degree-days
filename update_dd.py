@@ -107,14 +107,15 @@ def dd_for_site(stn, start_date):
 
 if __name__ == '__main__':
 
-    df_exist = pd.read_pickle(join(APP_PATH, 'data/degree_days.pkl', compression='bz2')
+    df_exist = pd.read_pickle(join(APP_PATH, 'data/degree_days.pkl'), compression='bz2')
 
     # list of new DataFrames to add to the existing one
     new_dfs = []
     for stn in df_exist.index.unique():
+        print('Processing {}: '.format(stn), end='')
         try:
             # get last month present for this station
-            last_mo = dfe.loc[stn].month.max()
+            last_mo = df_exist.loc[stn].month.max()
             # get a date in the following month
             next_mo = last_mo + timedelta(days=32)  # could be a DST change in there; add 32 days to be safe
 
@@ -131,6 +132,11 @@ if __name__ == '__main__':
                 # add it to the list of new DataFrames to eventually add to the
                 # degree-day DataFrame
                 new_dfs.append(df_new)
+                print('{} new months'.format(len(df_new)))
+
+            else:
+                print()
+
         except:
             print('{}: {}'.format(*sys.exc_info()[:2]))
 
@@ -142,5 +148,5 @@ if __name__ == '__main__':
     df_final.set_index('station', inplace=True)
 
     # Save the DataFrame as a compressed pickle and a CSV file.
-    df_final.to_pickle(join(APP_PATH, 'data/final_df.pkl'), compression='bz2')
-    df_final.to_csv(join(APP_PATH, 'data/final_df.csv'))
+    df_final.to_pickle(join(APP_PATH, 'data/degree_days.pkl'), compression='bz2')
+    df_final.to_csv(join(APP_PATH, 'data/degree_days.csv'))
