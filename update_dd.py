@@ -78,7 +78,9 @@ import requests
 
 # Minimum fraction of the hours in a month that must have data in order
 # to include the month.
-MIN_COVERAGE = 0.7     
+MIN_COVERAGE = 0.7
+
+print('\nScript Start: {}'.format(datetime.now().ctime()))
 
 # path to this directory
 APP_PATH = dirname(realpath(__file__))
