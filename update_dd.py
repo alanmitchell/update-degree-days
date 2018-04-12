@@ -34,6 +34,40 @@ following format:
  The MIN_COVERAGE constant in the script controls the minimum amount of data
  coverage a month must have before being included.  Missing data is filled 
  in with the average value for the rest of the hours that do have data.
+
+ -----------------------------------
+ NOTES ON UTILIZING THE DATA
+
+ To read this DataFrame back into a Python script, you can excecute the
+ following if the DataFrame is available on a local drive:
+
+    import pandas as pd
+    df = pd.read_pickle('degree_days.pkl', compression='bz2')
+
+If the file is located on a web server, you can read it with the following
+code:
+
+    import pandas as pd
+    import requests
+    from io import BytesIO
+    b = requests.get('http://ahfc.webfactional.com/data/degree_days.pkl').content
+    d = pd.read_pickle(BytesIO(b), compression='bz2')
+
+Once you have a DataFrame, you can extract that portion of the DataFrame that
+applies to one site by:
+
+    df_one_site = df.loc['PAMR']
+
+    or 
+
+    df_one_site = df.query("station == 'PAMR'")
+    (slower than above technique)
+
+To extract one site with a subset of the months:
+
+    df_one_site = df.query("station == 'PAMR' and month >= '2018-01-01'")
+
+
 """
 
 from os.path import dirname, join, realpath
