@@ -184,5 +184,5 @@ if __name__ == '__main__':
     df_final.set_index('station', inplace=True)
 
     # Save the DataFrame as a compressed pickle and a CSV file.
-    df_final.to_pickle(join(APP_PATH, 'data/degree_days.pkl'), compression='bz2')
+    df_final.to_pickle(join(APP_PATH, 'data/degree_days.pkl'), compression='bz2', protocol=4)
     df_final.to_csv(join(APP_PATH, 'data/degree_days.csv'))
